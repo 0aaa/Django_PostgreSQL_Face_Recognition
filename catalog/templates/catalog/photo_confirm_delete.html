@@ -1,0 +1,14 @@
+{% extends 'base_generic.html' %}
+
+
+{% block content %}
+    <h1>Delete photo</h1>
+
+    <p>Are you sure you want to delete the photo: {{ photo.name }}?</p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-outline-danger">Yes, delete.</button>
+    </form>
+{% endblock %}

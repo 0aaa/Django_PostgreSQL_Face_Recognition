@@ -1,0 +1,18 @@
+{% extends 'base_generic.html' %}
+{% load static %}
+
+
+{% block content %}
+    <h1>Face recognition</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <table class="table">
+            <!-- {{ form.as_p }} -->
+            <input type="file" name="to-recognize" class="form-control w-25">
+        </table>
+
+        <input type="submit" accept=".gif, .jpeg, .jpg, .png" value="Submit" class="btn btn-outline-danger"/>
+    </form>
+{% endblock %}

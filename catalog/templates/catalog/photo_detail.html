@@ -1,0 +1,14 @@
+{% extends 'base_generic.html' %}
+
+
+{% block content %}
+    <h1>{{ photo.name }}</h1>
+
+    <p>{{ photo.status }}</p>
+    
+    <img src="" alt="">
+
+    <p>{{ photo.bio }}</p>
+
+    <p><strong>uploaded by:</strong> {{ photo.user_set.first }}</p>
+{% endblock %}

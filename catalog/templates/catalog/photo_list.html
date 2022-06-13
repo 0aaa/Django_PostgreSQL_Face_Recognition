@@ -1,0 +1,27 @@
+{% extends 'base_generic.html' %}
+
+
+{% block content %}
+    <h1>Photos list</h1>
+
+    {% if photo_list %}
+        <ul class="list-group">
+            {% for photo in photo_list %}
+                {{ photo.photo }}
+                <a href="{% url 'photo-detail' photo.pk %}">
+                    <!-- <img src="" alt=""> -->
+
+                    {{ photo.name }}
+                </a>
+                
+                {% if perms.catalog.moderator_required %}
+                    <a href="{% url 'photo-update' photo.pk %}" class="btn btn-outline-danger w-25">Update</a>
+
+                    <a href="{% url 'photo-delete' photo.pk %}" class="btn btn-outline-danger w-25">Delete</a>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no photos.</p>
+    {% endif %}
+{% endblock %}
