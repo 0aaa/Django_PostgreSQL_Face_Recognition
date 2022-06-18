@@ -3,16 +3,17 @@
 
 
 {% block content %}
-    <h1>Face recognition</h1>
+    <h2>Face recognition</h2>
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" class="mb-5">
         {% csrf_token %}
 
         <table class="table">
-            <!-- {{ form.as_table }} -->
-            <input type="file" name="to-recognize" class="form-control">
+            {{ form.as_table }}
         </table>
 
-        <button type="submit" class="btn btn-outline-danger">Submit</button>
+        <input type="submit" accept=".gif, .jpeg, .jpg, .png" value="Submit" class="btn btn-outline-danger"/>
     </form>
+
+    <p>{{ founded_name }}</p>
 {% endblock %}

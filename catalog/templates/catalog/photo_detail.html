@@ -2,11 +2,11 @@
 
 
 {% block content %}
-    <h1>{{ photo.name }}</h1>
+    <h2>{{ photo.name }}</h2>
 
     <p>{{ photo.status }}</p>
     
-    <img src="" alt="">
+    <img src="../../static/images/known/{{photo.get_photo}}" alt="">
 
     <p>{{ photo.bio }}</p>
 

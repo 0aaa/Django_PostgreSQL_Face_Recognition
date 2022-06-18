@@ -2,23 +2,24 @@
 
 
 {% block content %}
-    <h1>Photos list</h1>
+    <h2>Photos list</h2>
 
     {% if photo_list %}
-        <ul class="list-group">
+        <ul class="list-unstyled">
             {% for photo in photo_list %}
-                {{ photo.photo }}
-                <a href="{% url 'photo-detail' photo.pk %}">
-                    <!-- <img src="" alt=""> -->
-
-                    {{ photo.name }}
-                </a>
-                
-                {% if perms.catalog.moderator_required %}
-                    <a href="{% url 'photo-update' photo.pk %}" class="btn btn-outline-danger w-25">Update</a>
-
-                    <a href="{% url 'photo-delete' photo.pk %}" class="btn btn-outline-danger w-25">Delete</a>
-                {% endif %}
+                <li class="mt-1 d-flex">
+                    <a href="{% url 'photo-detail' photo.pk %}" class="me-auto">
+                        <img src="../../static/images/known/{{photo.get_photo}}" alt="" width="100px" height="100px">
+                        
+                        {{ photo.name }}
+                    </a>
+                    
+                    {% if perms.catalog.moderator_required %}
+                        <a href="{% url 'photo-update' photo.pk %}" class="btn btn-outline-danger">Update</a>
+                        
+                        <a href="{% url 'photo-delete' photo.pk %}" class="btn btn-outline-danger">Delete</a>
+                    {% endif %}
+                </li>
             {% endfor %}
         </ul>
     {% else %}

@@ -1,9 +1,10 @@
 from django.db.models import CharField, FileField, ForeignKey, Model, SET_NULL
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 class Photo(Model):
-    photo = FileField(upload_to='static/images', help_text="Enter a person's photo")
+    photo = FileField(upload_to='catalog/static/images/known', max_length=50, help_text="Enter a person's photo")
     name = CharField(unique=True, max_length=50, help_text="Enter a person's name.")
     bio = CharField(max_length=200, help_text="Enter a person's bio.")
 
@@ -19,7 +20,12 @@ class Photo(Model):
         ordering = ['name']
     
     def get_photo(self):
-        return self.photo
+        t = self.photo.path.split('\\')[-1]
+        return t
         
     def get_name(self):
         return self.name
+    
+    def get_absolute_url(self):
+        """Returns the URL to access a particular record."""
+        return reverse('photo-detail', args=[str(self.id)])

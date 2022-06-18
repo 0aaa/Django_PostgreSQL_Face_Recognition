@@ -13,42 +13,39 @@ from .models import Photo
 
 
 
-def recognize(request):
+def index(request):
+    founded_name = ''
+    
+    form = RecognitionForm(request.POST, request.FILES)
     if request.method == 'POST':
 
-        form = RecognitionForm(request.POST, request.FILES)
-        to_recognize = request.FILES['to-recognize']
-        print(form.is_valid())
-        # if form.is_valid():
-        if request.method == 'POST':
+        if form.is_valid():
     
             res = False
-            founded_name = ''
-            known_images = Photo.objects.all()
+            known_images_lst = Photo.objects.all()
             known_image = None
             
-            unknown_image = face_recognition.load_image_file(to_recognize)
+            unknown_image = face_recognition.load_image_file(request.FILES['to_recognize'])
             unknown_encoding = face_recognition.face_encodings(unknown_image)[0]
             i = 0
 
-            while(not res and i <= len(known_images)):
-                known_image = face_recognition.load_image_file(known_images[i].get_photo())
+            while(i <= len(known_images_lst)):
+                known_image = face_recognition.load_image_file(known_images_lst[i].get_photo())
                 known_encoding = face_recognition.face_encodings(known_image)[0]
 
                 res = face_recognition.compare_faces([known_encoding], unknown_encoding)[0]
-                print(res, i)
                 
                 if res:
-                    founded_name = known_images[i].get_name()
+                    founded_name = f'The result: {known_images_lst[i].get_name()}'
+                    break
+
                 i += 1
-            
-            print(founded_name)
+
+            if not res:
+                founded_name = 'The result: not found'
     
-    return render(request, 'catalog/recognize.html')
+    return render(request, 'catalog/index.html', {'founded_name': founded_name, 'form': form})
 
-
-
-# def index(request):
 
 
 class PhotosListView(ListView):
@@ -84,16 +81,18 @@ class PhotoCreate(PermissionRequiredMixin, CreateView):
     permission_required = 'catalog.moderator_required'
     
     model = Photo
-    fields = ['name', 'bio']
+    fields = ['name', 'bio', 'photo']
     initial = {'bio': 'Bio has not been added yet.'}
+    extra_context = {'title': 'Add person'}
 
 
 class PhotoUpdate(PermissionRequiredMixin, UpdateView):
     permission_required = 'catalog.moderator_required'
     
     model = Photo
-    fields = ['name', 'bio']
+    fields = ['name', 'bio', 'photo']
     success_url = reverse_lazy('photos')
+    extra_context = {'title': 'Edit record'}
 
 
 class PhotoDelete(PermissionRequiredMixin, DeleteView):

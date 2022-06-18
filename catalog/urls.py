@@ -1,10 +1,9 @@
 from django.urls import path
-from .views import ExactListView, InexactListView, PhotoCreate, PhotoDelete, PhotoDetailView, PhotoUpdate, PhotosListView, recognize
+from .views import ExactListView, InexactListView, PhotoCreate, PhotoDelete, PhotoDetailView, PhotoUpdate, PhotosListView, index
 
 
 urlpatterns = [
-    # path('', index, name='index'),
-    path('', recognize, name='recognize'),
+    path('', index, name='index'),
     
     path('photos/', PhotosListView.as_view(), name='photos'),
     path('photos/<int:pk>', PhotoDetailView.as_view(), name='photo-detail'),

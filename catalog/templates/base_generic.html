@@ -8,33 +8,69 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
         
+        <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
         {% load static %}
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     </head>
-    <body class="m-5">
-        {% block content %}{% endblock %}
+    <body>
+        <div class="row m-5">
+            <div class="col-2">
+                {% block sidebar %}
+                    <ul class="navbar-nav">
+                        {% if user.is_authenticated %}
+                            <li>{{ user.username }}</li>
 
-        {% block pagination %}
-            {% if is_paginated %}
-                <div class="pagination">
-                    <span class="page-links">
-                        {% if page_obj.has_previous %}
-                            <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}" class="page-link">back</a>
+                            <li class="nav-item">
+                                <a href="{% url 'logout'%}?next={{request.path}}" class="nav-link">Log out</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="{% url 'login' %}?next={{request.path}}" class="nav-link">Log in</a>
+                            </li>
                         {% endif %}
+                        <li class="nav-item">
+                            <a href="{% url 'photos' %}" class="nav-link">Persons</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'exact' %}" class="nav-link">Exact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'inexact' %}" class="nav-link">Inexact</a>
+                        </li>
+                        {% if perms.catalog.moderator_required %}
+                            <li class="nav-item">
+                                <a href="{% url 'photo-create' %}" class="nav-link">Add person</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                {% endblock %}
+            </div>
 
-                        <span class="page-current">
-                            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            <div class="col-sm-10">
+                {% block content %}{% endblock %}
+            </div>
+
+            {% block pagination %}
+                {% if is_paginated %}
+                    <div class="pagination">
+                        <span class="page-links">
+                            {% if page_obj.has_previous %}
+                                <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}" class="page-link">back</a>
+                            {% endif %}
+
+                            <span class="page-current">
+                                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                            </span>
+                            
+                            {% if page_obj.has_next %}
+                                <a href="{{ request.path }}?page={{ page_obj.next_page_number }}" class="page-link">forward</a>
+                            {% endif %}
                         </span>
-                        
-                        {% if page_obj.has_next %}
-                            <a href="{{ request.path }}?page={{ page_obj.next_page_number }}" class="page-link">forward</a>
-                        {% endif %}
-                    </span>
-                </div>
-            {% endif %}
-        {% endblock %}
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+                    </div>
+                {% endif %}
+            {% endblock %}
+                
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+        </div>
     </body>
 </html>
